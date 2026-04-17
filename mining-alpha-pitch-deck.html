@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Playables SDK -->
+<script>// Playables SDK v1.0.0
+// Game lifecycle bridge: rAF-based game-ready detection + event communication
+(function() {
+  'use strict';
+
+  // Idempotency: skip if already initialized (e.g., server-side injection
+  // followed by client-side inject-javascript via the Bloks webview component).
+  if (window.playablesSDK) return;
+
+  var HANDLER_NAME = 'playablesGameEventHandler';
+  var ANDROID_BRIDGE_NAME = '_MetaPlayablesBridge';
+  var RAF_FRAME_THRESHOLD = 3;
+
+  var gameReadySent = false;
+  var firstInteractionSent = false;
+  var errorSent = false;
+  var frameCount = 0;
+  var originalRAF = window.requestAnimationFrame;
+
+  // --- Transport Layer ---
+
+  function hasIOSBridge() {
+    return !!(window.webkit &&
+              window.webkit.messageHandlers &&
+              window.webkit.messageHandlers[HANDLER_NAME]);
+  }
+
+  function hasAndroidBridge() {
+    return !!(window[ANDROID_BRIDGE_NAME] &&
+              typeof window[ANDROID_BRIDGE_NAME].postEvent === 'function');
+  }
+
+  function isInIframe() {
+    return !!(window.parent && window.parent !== window);
+  }
+
+  function sendEvent(eventName, payload) {
+    var message = {
+      type: eventName,
+      payload: payload || {},
+      timestamp: Date.now()
+    };
+
+    if (hasIOSBridge()) {
+      try {
+        window.webkit.messageHandlers[HANDLER_NAME].postMessage(message);
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (hasAndroidBridge()) {
+    try {
+      var p = payload || {};
+      p.__secureToken = window.__fbAndroidBridgeAuthToken || '';
+      window[ANDROID_BRIDGE_NAME].postEvent(
+        eventName,
+        JSON.stringify(p)
+      );
+    } catch (e) { /* ignore */ }
+    return;
+  }
+
+    if (isInIframe()) {
+      try {
+        window.parent.postMessage(message, '*');
+      } catch (e) { /* ignore */ }
+      return;
+    }
+  }
+
+  // --- rAF Game-Ready Detection ---
+
+  function onFrame() {
+    if (gameReadySent) return;
+
+    frameCount++;
+    if (frameCount >= RAF_FRAME_THRESHOLD) {
+      gameReadySent = true;
+      sendEvent('game_ready', {
+        frame_count: frameCount,
+        detected_at: Date.now()
+      });
+      return;
+    }
+
+    originalRAF.call(window, onFrame);
+  }
+
+  if (originalRAF) {
+    window.requestAnimationFrame = function(callback) {
+      if (!gameReadySent) {
+        return originalRAF.call(window, function(timestamp) {
+          frameCount++;
+          if (frameCount >= RAF_FRAME_THRESHOLD && !gameReadySent) {
+            gameReadySent = true;
+            sendEvent('game_ready', {
+              frame_count: frameCount,
+              detected_at: Date.now()
+            });
+          }
+          callback(timestamp);
+        });
+      }
+      return originalRAF.call(window, callback);
+    };
+  }
+
+  // --- First User Interaction Detection ---
+
+  function setupFirstInteractionDetection() {
+    var events = ['touchstart', 'mousedown', 'keydown'];
+
+    function onFirstInteraction() {
+      if (firstInteractionSent) return;
+      firstInteractionSent = true;
+      sendEvent('user_interaction_start', null);
+
+      for (var i = 0; i < events.length; i++) {
+        document.removeEventListener(events[i], onFirstInteraction, true);
+      }
+    }
+
+    for (var i = 0; i < events.length; i++) {
+      document.addEventListener(events[i], onFirstInteraction, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFirstInteractionDetection);
+  } else {
+    setupFirstInteractionDetection();
+  }
+
+  // --- Auto Error Capture ---
+
+  window.addEventListener('error', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    sendEvent('error', {
+      message: event.message || 'Unknown error',
+      source: event.filename || '',
+      lineno: event.lineno || 0,
+      colno: event.colno || 0,
+      auto_captured: true
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    var reason = event.reason;
+    sendEvent('error', {
+      message: (reason instanceof Error) ? reason.message : String(reason),
+      type: 'unhandled_promise_rejection',
+      auto_captured: true
+    });
+  });
+
+  // --- Public API ---
+
+  window.playablesSDK = {
+    complete: function(score) {
+      sendEvent('game_ended', {
+        score: score,
+        completed: true
+      });
+    },
+
+    error: function(message) {
+      if (errorSent) return;
+      errorSent = true;
+      sendEvent('error', {
+        message: message || 'Unknown error',
+        auto_captured: false
+      });
+    },
+
+    sendEvent: function(eventName, payload) {
+      if (!eventName || typeof eventName !== 'string') return;
+      sendEvent(eventName, payload);
+    }
+  };
+
+  // Kick off rAF detection in case no game code calls rAF immediately
+  if (originalRAF) {
+    originalRAF.call(window, onFrame);
+  }
+})();</script>
+<script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MiningAlpha — Pre-Seed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#050507;
+  --bg2:#0a0a0f;
+  --text:#e8e8ea;
+  --text-dim:rgba(232,232,234,0.68);
+  --gold:#d4af37;
+  --blue:#7aa2ff;
+  --border:rgba(255,255,255,0.08);
+  --card:rgba(255,255,255,0.03);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:radial-gradient(1200px 600px at 50% -10%, #15151f 0%, transparent 60%), linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse at center, black 30%, transparent 70%);
+  animation:grid-drift 80s linear infinite;
+}
+@keyframes grid-drift{0%{transform:translateY(0)}100%{transform:translateY(72px)}}
+.progress{position:fixed;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,0.06);z-index:100}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),#f0d27a);box-shadow:0 0 16px rgba(212,175,55,0.5);transition:width 0.3s ease}
+.deck{position:relative;width:100%;height:100vh;z-index:1}
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 40px;
+  opacity:0;transform:translateY(24px) scale(0.985);
+  transition:all 0.45s cubic-bezier(.21,.8,.22,1);
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;z-index:2}
+.slide-inner{width:100%;max-width:1000px;position:relative}
+.glow{
+  position:absolute;top:-180px;left:50%;transform:translateX(-50%);
+  width:900px;height:500px;
+  background:radial-gradient(ellipse, rgba(212,175,55,0.18) 0%, rgba(122,162,255,0.10) 35%, transparent 70%);
+  filter:blur(70px);pointer-events:none;z-index:-1;
+}
+h1{font-size:clamp(56px,9vw,96px);font-weight:800;letter-spacing:-0.03em;line-height:0.9;margin-bottom:24px}
+h2{font-size:clamp(32px,4.3vw,42px);font-weight:700;letter-spacing:-0.02em;line-height:1.15;margin-bottom:36px}
+p,li{font-size:clamp(17px,2vw,22px);line-height:1.6;color:rgba(232,232,234,0.9)}
+.subtitle{font-size:clamp(20px,2.4vw,26px);color:var(--text-dim);font-weight:400;margin-top:8px}
+.footer-meta{margin-top:80px;font-size:14px;color:rgba(232,232,234,0.42);letter-spacing:0.02em}
+.gold{color:var(--gold)}
+.blue{color:var(--blue);font-variant-numeric:tabular-nums}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:18px}
+.bullets li{position:relative;padding-left:28px}
+.bullets li::before{content:'';position:absolute;left:0;top:0.65em;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(212,175,55,0.6)}
+.sub-list{margin:14px 0 6px 0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.sub-list li{padding-left:22px;position:relative;color:var(--text-dim);font-size:clamp(16px,1.85vw,20px)}
+.sub-list li::before{content:'–';position:absolute;left:0;top:0;color:rgba(232,232,234,0.35)}
+.center{text-align:center}
+.big-statement{font-size:clamp(28px,4.2vw,52px);font-weight:650;letter-spacing:-0.015em;line-height:1.25;margin-bottom:28px}
+.big-statement.final{margin-top:48px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:20px;padding:28px;
+  backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.05), 0 10px 40px rgba(0,0,0,0.4);
+}
+.card h3{font-size:18px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:12px;font-weight:600}
+.card p{font-size:18px;line-height:1.5;color:rgba(232,232,234,0.85)}
+.num{color:var(--gold);font-weight:700;margin-right:8px}
+.agents{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.pill{
+  padding:8px 14px;border-radius:999px;
+  background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.25);
+  font-size:15px;font-weight:600;letter-spacing:0.02em;color:#f0d9a0;
+}
+.highlight{
+  background:rgba(122,162,255,0.08);border:1px solid rgba(122,162,255,0.25);
+  border-radius:16px;padding:18px 22px;margin:24px 0;
+  font-size:19px;color:#d6e3ff;
+}
+.mock{
+  margin-top:28px;
+  background:linear-gradient(180deg,#0d0e14,#08090d);
+  border:1px solid var(--border);border-radius:18px;
+  padding:26px;position:relative;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.55);
+}
+.mock::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 200px at 20% 0%, rgba(212,175,55,0.12), transparent 60%);pointer-events:none}
+.mock-title{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--text-dim);letter-spacing:0.04em;margin-bottom:14px;text-transform:uppercase}
+.mock-body{font-size:18px;line-height:1.5}
+.mock-body strong{color:var(--gold);font-weight:600}
+.note{margin-top:14px;font-size:16px;color:var(--text-dim);font-style:italic}
+.metrics{margin-top:28px;font-size:15px;color:rgba(232,232,234,0.45)}
+.layer-stack{display:flex;flex-direction:column;gap:16px;margin-top:24px}
+.layer{
+  display:grid;grid-template-columns:140px 1fr;gap:20px;
+  padding:22px 24px;border-radius:16px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);
+}
+.layer-label{font-weight:700;color:var(--gold);font-size:16px;letter-spacing:0.02em}
+.layer-desc{color:rgba(232,232,234,0.85);font-size:18px}
+.callout{margin-top:28px;padding:16px 20px;border-radius:12px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);color:#f0d9a0;font-size:18px}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:24px}
+.checklist li{position:relative;padding-left:32px;font-size:22px}
+.checklist li::before{content:'✓';position:absolute;left:0;top:0;color:var(--gold);font-weight:700}
+.team{margin-top:24px}
+.team-name{font-size:28px;font-weight:700;margin-bottom:12px}
+.team-bullets{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.team-bullets li{position:relative;padding-left:24px;color:rgba(232,232,234,0.85)}
+.team-bullets li::before{content:'•';position:absolute;left:0;color:var(--blue)}
+.vision{font-size:clamp(38px,6vw,72px);font-weight:800;letter-spacing:-0.02em;line-height:1.05;text-align:center;max-width:900px;margin:0 auto}
+.vision-sub{margin-top:80px;font-size:15px;color:rgba(232,232,234,0.4);text-align:center}
+
+/* UI */
+.counter{position:fixed;bottom:28px;left:32px;font-size:14px;color:rgba(232,232,234,0.5);font-variant-numeric:tabular-nums;z-index:100;letter-spacing:0.03em}
+.nav{position:fixed;bottom:24px;right:32px;display:flex;gap:12px;z-index:100}
+.nav-btn{
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  display:grid;place-items:center;cursor:pointer;
+  backdrop-filter:blur(10px);transition:all 0.2s ease;
+  color:var(--text);
+}
+.nav-btn:hover{background:rgba(212,175,55,0.15);border-color:rgba(212,175,55,0.4);transform:translateY(-1px)}
+.nav-btn:active{transform:translateY(0)}
+.nav-btn svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none}
+.hint{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  font-size:13px;color:rgba(232,232,234,0.45);background:rgba(0,0,0,0.4);
+  padding:8px 14px;border-radius:999px;border:1px solid var(--border);
+  backdrop-filter:blur(8px);z-index:100;transition:opacity 0.6s ease;
+}
+.hint.hide{opacity:0;pointer-events:none}
+
+/* mobile */
+@media (max-width:900px){
+  .slide{padding:60px 24px;align-items:flex-start;padding-top:18vh}
+  .grid-3{grid-template-columns:1fr}
+  .layer{grid-template-columns:1fr;gap:8px}
+  .footer-meta{position:relative;bottom:auto;margin-top:60px}
+  .glow{width:600px;height:300px;top:-100px}
+  .nav{bottom:20px;right:20px}
+  .counter{bottom:32px;left:20px}
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="progress"><div class="progress-fill" id="progress"></div></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 COVER -->
+  <section class="slide active">
+    <div class="slide-inner center">
+      <div class="glow"></div>
+      <h1>MiningAlpha</h1>
+      <p class="subtitle">AI-native supply intelligence for global mining</p>
+      <div class="footer-meta">miningalpha.ai · Harry Trippel · April 2026 · Zug, Switzerland</div>
+    </div>
+  </section>
+
+  <!-- 2 PROBLEM -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>The core data in a multi-trillion dollar asset class is locked up</h2>
+      <ul class="bullets">
+        <li>Mining valuation runs on supply data: ounces in the ground, grade, production cost, AISC. Every serious investor needs this.</li>
+        <li>It lives in 200-page PDFs. Every junior publishes NI 43-101 or JORC technical reports. Thousands of them. No structured database below the majors.</li>
+        <li>The structured version exists, but it is gated behind terminals built for institutions:
+          <ul class="sub-list">
+            <li>S&P Capital IQ Pro (Metals & Mining): used by mining funds and M&A desks. <span class="blue">$15k to $30k</span> per seat per year.</li>
+            <li>Wood Mackenzie: used by majors, commodity traders, sovereign wealth. Five to six figure annual subscriptions. Single reports <span class="blue">$6,750</span> each.</li>
+            <li>Benchmark Mineral Intelligence: authority on lithium, cobalt, rare earths. Prices settle ICE futures. Enterprise only, quote-based.</li>
+            <li>Bloomberg Terminal: <span class="blue">$25k</span> per seat, mining coverage is shallow.</li>
+          </ul>
+        </li>
+        <li>Result: everyone below institutional flies blind. Retail has nothing. Mid-tier funds screenshot PDFs. AI agents cannot ingest mining data at all.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 ANALOGY -->
+  <section class="slide">
+    <div class="slide-inner center" style="max-width:1100px">
+      <div class="glow"></div>
+      <p class="big-statement">Mining data in 2026 is where on-chain data was in 2019.</p>
+      <p class="big-statement">Chainalysis and Nansen charged institutions for structured blockchain data. Dune made it open and queryable. DeFi was built on top.</p>
+      <p class="big-statement final">Nobody has done this for mining. <span class="gold">We are.</span></p>
+    </div>
+  </section>
+
+  <!-- 4 WHY NOW -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>Three things converged in the last 12 months</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3><span class="num">1</span>Capital rotation</h3>
+          <p>Capital is rotating into mining. Gold above <span class="blue">$4,000</span>. Critical minerals policy tailwind: DoD spending, Western decoupling from Chinese rare earths.</p>
+        </div>
+        <div class="card">
+          <h3><span class="num">2</span>AI-vulnerable incumbents</h3>
+          <p>Capital IQ, Wood Mac, Benchmark were built for human analysts. AI agents now do it for a fraction of the cost.</p>
+        </div>
+        <div class="card">
+          <h3><span class="num">3</span>Public data</h3>
+          <p>The data itself is public. Filings are free on SEDAR+, ASX, SEC. The moat was never access. It was structuring. That was a human bottleneck. It is not anymore.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 INSIGHT -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>The data is the asset. Distribution follows.</h2>
+      <ul class="bullets">
+        <li>Specialized AI agents with domain-calibrated knowledge extract, normalize, and reason over mining data at scale.</li>
+        <li>What Wood Mac analysts do in weeks, our agents do in minutes. Structured, machine-queryable output.</li>
+        <li>Incumbents sell PDFs. We build the layer everyone else will build on: retail platforms, funds, aggregators, AI companies.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 PRODUCT -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>MiningAlpha: six specialist agents score every junior</h2>
+      <div class="agents">
+        <span class="pill">Geo</span>
+        <span class="pill">Tech</span>
+        <span class="pill">Fin</span>
+        <span class="pill">Juris</span>
+        <span class="pill">Mgmt</span>
+        <span class="pill">Val</span>
+      </div>
+      <p style="color:var(--text-dim);margin-bottom:8px">Each dimension scored, calibrated, and peer-ranked.</p>
+      <div class="highlight">Live today: 99 junior miners fully scored. Extraction and processing pipeline in production.</div>
+      <div class="mock">
+        <div class="mock-title">LIVE SCREENSHOT</div>
+        <div class="mock-body">
+          i-80 Gold Corp (IAU.TSX) — six-agent score, EV/oz peer comp <strong>$275/oz</strong> vs M&A median, AI thesis
+        </div>
+      </div>
+      <p class="note">Think MEV bots for mining assets. Each agent specialized on a different dimension of value.</p>
+    </div>
+  </section>
+
+  <!-- 7 TRACTION -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>Machine built. Distribution starts now.</h2>
+      <ul class="bullets">
+        <li>99 junior miners scored on live platform miningalpha.ai</li>
+        <li>Full data extraction and processing pipeline in production</li>
+        <li>Early feedback from Zug-based commodity traders validating thesis</li>
+        <li>Zero marketing spend to date. Building the asset first.</li>
+      </ul>
+      <div class="metrics"><span class="blue">147</span> visitors, <span class="blue">504</span> page views (pre-launch, no ads)</div>
+    </div>
+  </section>
+
+  <!-- 8 ROADMAP -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>Three layers. Each makes the previous harder to replicate.</h2>
+      <div class="layer-stack">
+        <div class="layer">
+          <div class="layer-label">Layer 1: Live today</div>
+          <div class="layer-desc">Public filings, press releases, financials. AI-extracted and normalized across NI 43-101 and JORC.</div>
+        </div>
+        <div class="layer">
+          <div class="layer-label">Layer 2: Next</div>
+          <div class="layer-desc">Drill results, geological models, technical reports. Structured and queryable.</div>
+        </div>
+        <div class="layer">
+          <div class="layer-label">Layer 3: Tomorrow</div>
+          <div class="layer-desc">Satellite imagery for mine-level activity and supply verification. Partnership discussions in progress with Zug-based Earth observation firm.</div>
+        </div>
+      </div>
+      <div class="callout">Filings tell you what a company claims. Satellite tells you what is actually moving. We flag the gap at scale.</div>
+    </div>
+  </section>
+
+  <!-- 9 MARKET -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>We replace the analyst layer and open it to everyone below the top tier</h2>
+      <ul class="bullets">
+        <li>S&P Metals & Mining generates hundreds of millions selling analyst-produced PDFs.</li>
+        <li>Wood Mackenzie does over <span class="blue">$1B</span> on energy plus mining combined.</li>
+        <li>Benchmark Mineral Intelligence is the reference price for battery metals, priced for enterprise only.</li>
+        <li>Gold today is proof point. Critical minerals and rare earths are expansion: same architecture, bigger strategic tailwind.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 BUSINESS MODEL -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>Three paths to revenue. Validating which pulls hardest.</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Retail platform</h3>
+          <p>Fastest to revenue. Subscription access to scores and comparables.</p>
+        </div>
+        <div class="card">
+          <h3>B2B API</h3>
+          <p>Highest margin. Feed structured data to aggregators, fund managers, trading desks.</p>
+        </div>
+        <div class="card">
+          <h3>AI licensing</h3>
+          <p>Biggest long-term. Perplexity-type players and financial agent builders need clean mining data in context.</p>
+        </div>
+      <p style="margin-top:28px;color:var(--text-dim);font-size:18px">Hypothesis: retail first, B2B shortly after, AI licensing as long tail. Next 6 months validate.</p>
+    </div>
+  </section>
+
+  <!-- 11 TEAM -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2>Team</h2>
+      <div class="team">
+        <div class="team-name">Harry Trippel, Founder</div>
+        <ul class="team-bullets">
+          <li>Built and shipped data and analytics infrastructure at scale, including smart contracts holding >$1B TVL and production analytics used by major protocols.</li>
+          <li>Full-stack: data extraction, AI agent architecture, infrastructure, go-to-market.</li>
+          <li>Based in Zug, Europe's commodity trading capital.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 ASK -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="glow"></div>
+      <h2><span class="gold">$250k</span> at <span class="gold">$2.5M</span> pre-money. 12-month runway.</h2>
+      <p style="color:var(--text-dim);margin-bottom:18px">What it buys:</p>
+      <ul class="checklist">
+        <li>Expand from 99 gold juniors to 300+ companies, adding critical minerals and rare earths</li>
+        <li>Ship public API beta and onboard first 10 paying users</li>
+        <li>Layer 2 live: drill results and technical reports structured and queryable</li>
+        <li>Start satellite pilot: proof-of-concept verification on 5-10 active mines with Zug EO partner</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 13 VISION -->
+  <section class="slide">
+    <div class="slide-inner center">
+      <div class="glow"></div>
+      <div class="vision">The structured supply layer for how the world prices mining assets.</div>
+      <div class="vision-sub">Contact: harry@miningalpha.ai</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="counter" id="counter">1 / 13</div>
+<div class="nav">
+  <button class="nav-btn" id="prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="nav-btn" id="next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+</div>
+<div class="hint" id="hint">Use ← → to navigate</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let current = 0;
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+const hint = document.getElementById('hint');
+
+function update() {
+  slides.forEach((s,i)=>{
+    s.classList.toggle('active', i===current);
+    s.classList.toggle('prev', i<current);
+  });
+  progress.style.width = ((current+1)/total*100)+'%';
+  counter.textContent = `${current+1} / ${total}`;
+}
+function next(){ if(current<total-1){current++;update()} }
+function prev(){ if(current>0){current--;update()} }
+
+document.getElementById('next').addEventListener('click', next);
+document.getElementById('prev').addEventListener('click', prev);
+
+window.addEventListener('keydown', e=>{
+  if(['ArrowRight',' ','PageDown'].includes(e.key)){ e.preventDefault(); next(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
+  if(e.key==='Home'){ current=0; update(); }
+  if(e.key==='End'){ current=total-1; update(); }
+});
+
+// touch swipe
+let startX=0, startY=0;
+window.addEventListener('touchstart', e=>{
+  startX=e.touches[0].clientX; startY=e.touches[0].clientY;
+},{passive:true});
+window.addEventListener('touchend', e=>{
+  const dx=e.changedTouches[0].clientX-startX;
+  const dy=Math.abs(e.changedTouches[0].clientY-startY);
+  if(Math.abs(dx)>50 && dy<80){ dx<0?next():prev(); }
+},{passive:true});
+
+// hide hint
+setTimeout(()=>hint.classList.add('hide'), 5000);
+
+// init
+update();
+
+// preload subtle interaction
+document.addEventListener('click', e=>{
+  if(e.target.closest('.nav-btn')) return;
+  const rect = document.body.getBoundingClientRect();
+  if(e.clientX > rect.width*0.6) next();
+  else if(e.clientX < rect.width*0.4) prev();
+});
+</script>
+</body>
+</html>

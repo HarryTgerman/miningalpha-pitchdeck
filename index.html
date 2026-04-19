@@ -436,8 +436,19 @@ h2{
   font-family:var(--sans); font-size:clamp(1.65rem, 2vw + .9rem, 2.5rem);
   color:var(--gold); line-height:1.08; margin-bottom:8px; font-weight:800;
 }
-.m-card h3{margin:0 0 6px; font-size:clamp(1.05rem, .45vw + .92rem, 1.35rem); font-weight:700; line-height:1.28; color:#f2efe8}
+.m-card h3{margin:0 0 10px; font-size:clamp(1.05rem, .45vw + .92rem, 1.35rem); font-weight:700; line-height:1.28; color:#f2efe8}
 .m-card p{margin:0; color:var(--body-secondary); font-size:clamp(.98rem, .4vw + .85rem, 1.08rem); line-height:1.62; font-weight:400}
+.cust-metrics{display:grid; gap:0; margin:4px 0 12px}
+.cust-metric{
+  display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+  padding:8px 0; border-bottom:1px solid rgba(255,255,255,.07);
+  font-size:clamp(.88rem, .35vw + .82rem, 1rem); line-height:1.35;
+}
+.cust-metric:last-of-type{border-bottom:0}
+.cust-metric span:first-child{color:var(--muted); font-weight:500}
+.cust-metric span:last-child{color:var(--text); font-weight:600; text-align:right; max-width:58%}
+.cust-lede{margin:0 0 10px; color:var(--body-secondary); font-size:clamp(.92rem, .38vw + .84rem, 1.05rem); line-height:1.5}
+.cust-examples{color:var(--muted-2); font-size:clamp(.82rem, .3vw + .78rem, .95rem); line-height:1.45; margin:0}
 .bm{
   background:linear-gradient(165deg, rgba(255,255,255,.05), rgba(255,255,255,.012));
   border:1px solid var(--line); border-radius:var(--radius-md); padding:24px 26px; text-align:left;
@@ -524,6 +535,8 @@ h2{
   .gold-bar{padding-left:14px}
   .two-col,.three-cards,.grid-3,.product-grid,.traction{display:flex; flex-direction:column; gap:20px}
   .card--thesis{margin-bottom:20px}
+  .cust-metric{flex-direction:column; align-items:flex-start; gap:2px}
+  .cust-metric span:last-child{text-align:left; max-width:100%}
   .why-card h3{font-size:1.35rem}
   .why-card p,.layer p,.bm p{font-size:.95rem}
   .card{padding:20px; border-radius:18px}
@@ -698,19 +711,37 @@ h2{
     <h2>Target customers</h2>
     <div class="grid-3">
       <div class="m-card">
-        <div class="m-top">Retail pros</div>
-        <h3>Newsletter operators</h3>
-        <p>Mazumdar (Exploration Insights, $170/mo), Brian Leni (Junior Stock Review), John Kaiser, Brent Cook. They read NI 43-101s by hand. A structured query layer is an obvious upsell — and one public endorsement opens the retail funnel.</p>
+        <div class="m-top">Retail</div>
+        <h3>Retail investors</h3>
+        <p class="cust-lede">Serious retail doing their own work on juniors — not passive ETF buyers.</p>
+        <div class="cust-metrics">
+          <div class="cust-metric"><span>Typical research spend</span><span>~$100–250/mo</span></div>
+          <div class="cust-metric"><span>Top newsletter anchor (EI)</span><span>~$170/mo</span></div>
+          <div class="cust-metric"><span>Global “active” retail (est.)</span><span>10k–25k</span></div>
+        </div>
+        <p class="cust-examples">Newsletters many follow: Mazumdar, Leni, Kaiser, Cook. Still reading NI 43-101s by hand — a structured layer is the obvious next step.</p>
       </div>
       <div class="m-card">
-        <div class="m-top">Funds</div>
-        <h3>Commodity pods &amp; streamers</h3>
-        <p>Balyasny commodities pod, Sprott family of funds, Paulson, Crescat. Streaming cos for deal sourcing: Franco-Nevada, Wheaton, Triple Flag, Elemental Royalty. Today they pay $15k–$30k for CapIQ/WoodMac and still build EV/oz sheets by hand.</p>
+        <div class="m-top">Institutions</div>
+        <h3>Funds &amp; streamers</h3>
+        <p class="cust-lede">Commodity pods and royalty/streaming teams screening dozens of names per year.</p>
+        <div class="cust-metrics">
+          <div class="cust-metric"><span>Terminal / data stack</span><span>$15k–30k+ / yr</span></div>
+          <div class="cust-metric"><span>EV/oz comps today</span><span>mostly Excel</span></div>
+          <div class="cust-metric"><span>Illustrative seat value</span><span>$25k–150k / yr</span></div>
+        </div>
+        <p class="cust-examples">Examples: Balyasny commodity pod, Sprott complex; streamers Franco-Nevada, Wheaton, Triple Flag — same filings, manual workflows.</p>
       </div>
       <div class="m-card">
-        <div class="m-top">Agents</div>
-        <h3>AI research platforms</h3>
-        <p>Perplexity, ChatGPT, Claude, Fintool, Morningstar, OpenBB, Reflexivity. Every AI research surface already pulls structured financial APIs — and every one of them hallucinates on mining today. We ship the data and the integrations they need.</p>
+        <div class="m-top">AI</div>
+        <h3>Research stacks</h3>
+        <p class="cust-lede">Copilots and APIs that already pull market data — but not junior mining supply.</p>
+        <div class="cust-metrics">
+          <div class="cust-metric"><span>Alt-data market (’27)</span><span>~$14B</span></div>
+          <div class="cust-metric"><span>API / agent tier (typ.)</span><span>$500–50k+ / yr</span></div>
+          <div class="cust-metric"><span>Mining-specific feed</span><span>effectively none</span></div>
+        </div>
+        <p class="cust-examples">Surfaces: Perplexity, ChatGPT, Claude, OpenBB, Morningstar. Ask for TSX-V EV/oz — you get guesses. We ship structure + integrations.</p>
       </div>
     </div>
     <div class="card" style="margin-top:28px; border-color:rgba(201,168,106,.4)">

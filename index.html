@@ -196,17 +196,19 @@
 <title>MiningAlpha — Pitch Deck v6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#14161c;
   --bg-2:#0f1115;
-  --text:#e8e6e1;
-  --muted:#b8b5ad;
-  --muted-2:#8c887e;
+  --text:#f2f0eb;
+  --muted:#cdc9c0;
+  --muted-2:#a39e93;
   --gold:#c9a86a;
   --line:rgba(201,168,106,.22);
   --card:rgba(255,255,255,.03);
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --display:"Playfair Display",Georgia,"Times New Roman",serif;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -214,8 +216,12 @@ body{
   margin:0;
   background:#0c0d10;
   color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  font-family:var(--sans);
+  font-size:18px;
+  font-weight:400;
+  font-synthesis:none;
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
   text-rendering:optimizeLegibility;
 }
 .deck{
@@ -254,37 +260,39 @@ body{
 .logo img{width:36px; height:36px; object-fit:contain; opacity:.95; filter:brightness(1.1)}
 .slide-num{
   position:absolute; top:80px; left:100px;
-  font-size:14px; letter-spacing:.28em; color:var(--gold); font-weight:600;
+  font-size:14px; letter-spacing:.2em; color:var(--gold); font-weight:600;
+  font-family:var(--sans);
 }
 .slide-counter{
   position:absolute; bottom:80px; left:100px;
-  color:var(--muted-2); font-size:15px; letter-spacing:.12em;
+  color:var(--muted-2); font-size:15px; letter-spacing:.08em;
+  font-family:var(--sans);
 }
 h1.wordmark{
-  font-family:"Playfair Display", Georgia, serif;
-  font-weight:900; font-size:124px; line-height:.88; letter-spacing:-.02em;
-  margin:0 0 24px; color:#f0ede6;
+  font-family:var(--display);
+  font-weight:900; font-size:124px; line-height:.9; letter-spacing:-.02em;
+  margin:0 0 24px; color:#faf8f4;
 }
 h2{
-  font-family:"Playfair Display", Georgia, serif;
-  font-weight:800; font-size:84px; line-height:1.02; letter-spacing:-.02em;
+  font-family:var(--display);
+  font-weight:800; font-size:84px; line-height:1.08; letter-spacing:-.02em;
   margin:0 0 40px; max-width:1200px;
 }
-.subtitle{font-size:28px; color:var(--muted); margin-top:8px}
-.lead{font-size:28px; line-height:1.55; color:#d9d6cf; max-width:1100px}
-.body{font-size:24px; line-height:1.65; color:#d4d1c8}
+.subtitle{font-size:28px; color:var(--muted); margin-top:8px; font-weight:500; line-height:1.45}
+.lead{font-size:29px; line-height:1.62; color:var(--text); max-width:1100px; font-weight:400}
+.body{font-size:25px; line-height:1.68; color:var(--text); font-weight:400}
 .gold{color:var(--gold)}
 .gold-bar{border-left:4px solid var(--gold); padding-left:28px}
-.eyebrow{text-transform:uppercase; letter-spacing:.18em; font-size:13px; color:var(--gold); font-weight:600; margin-bottom:14px}
+.eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:13px; color:var(--gold); font-weight:600; margin-bottom:14px; font-family:var(--sans)}
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
   border:1px solid var(--line); border-radius:22px; padding:32px;
   box-shadow:0 10px 40px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04);
 }
 .two-col{display:grid; grid-template-columns:1.15fr .85fr; gap:80px; align-items:start}
-.point{font-size:26px; line-height:1.45; color:#e6e2d8; margin:22px 0; font-weight:500}
+.point{font-size:27px; line-height:1.52; color:var(--text); margin:22px 0; font-weight:500}
 .point strong{color:#fff; font-weight:600}
-.price-row{display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:20px}
+.price-row{display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:21px; font-weight:400}
 .price-row:last-child{border-bottom:0}
 .price-row span:first-child{color:#d5d1c6}
 .price-row span:last-child{color:var(--gold); font-weight:600}
@@ -294,45 +302,45 @@ h2{
 .product-grid{grid-template-columns:1.1fr .9fr; align-items:center}
 .why-card{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:32px}
 .why-card .n{width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:rgba(201,168,106,.15); color:var(--gold); font-weight:700; margin-bottom:16px; border:1px solid var(--line)}
-.why-card h3{font-family:"Playfair Display"; font-size:34px; margin:0 0 12px}
-.why-card p{font-size:21px; line-height:1.6; color:#cbc7bc; margin:0}
+.why-card h3{font-family:var(--display); font-size:34px; margin:0 0 12px; font-weight:800; line-height:1.15}
+.why-card p{font-size:22px; line-height:1.62; color:var(--muted); margin:0; font-weight:400}
 .pills{display:flex; flex-wrap:wrap; gap:12px; margin:12px 0 32px}
 .pills span{padding:10px 16px; border:1px solid var(--line); border-radius:999px; background:rgba(201,168,106,.08); color:#e5d8b7; font-weight:600; letter-spacing:.08em; font-size:14px}
 .mock-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; font-weight:600}
 .tag{font-size:12px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; color:var(--gold)}
-.metric .big{font-family:"Playfair Display"; font-size:56px; color:var(--gold); display:block; line-height:1}
-.metric span:last-child{color:var(--muted); font-size:16px}
+.metric .big{font-family:var(--display); font-size:56px; color:var(--gold); display:block; line-height:1}
+.metric span:last-child{color:var(--muted); font-size:16px; font-weight:400}
 .bars{display:flex; gap:8px; margin-top:22px}
 .bars div{height:6px; flex:1; background:rgba(255,255,255,.08); border-radius:3px; position:relative; overflow:hidden}
 .bars div::after{content:""; position:absolute; inset:0; width:65%; background:linear-gradient(90deg, var(--gold), #e7d1a3)}
 .traction{display:grid; grid-template-columns:.55fr 1fr; gap:60px; align-items:center}
-.big-number{font-family:"Playfair Display"; font-size:240px; line-height:.8; color:var(--gold); font-weight:800; letter-spacing:-.03em}
+.big-number{font-family:var(--display); font-size:240px; line-height:.82; color:var(--gold); font-weight:800; letter-spacing:-.03em}
 .list{list-style:none; padding:0; margin:20px 0 0}
-.list li{font-size:24px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.07); color:#d6d3cb}
+.list li{font-size:25px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.07); color:var(--text); font-weight:400; line-height:1.45}
 .list li strong{color:#fff}
 .roadmap{display:grid; gap:22px; max-width:1200px}
 .layer{display:grid; grid-template-columns:140px 1fr; gap:28px; align-items:start; padding:28px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:18px}
 .layer-n{color:var(--gold); font-weight:700; letter-spacing:.14em; font-size:14px; padding-top:6px}
-.layer h3{margin:0 0 6px; font-family:"Playfair Display"; font-size:32px}
-.layer p{margin:0; color:#c9c5bb; font-size:20px}
+.layer h3{margin:0 0 6px; font-family:var(--display); font-size:32px; line-height:1.12}
+.layer p{margin:0; color:var(--muted); font-size:21px; line-height:1.55; font-weight:400}
 .m-card{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:28px}
-.m-top{font-family:"Playfair Display"; font-size:48px; color:var(--gold); line-height:1; margin-bottom:10px}
-.m-card h3{margin:0 0 8px; font-size:24px}
-.m-card p{margin:0; color:#c7c3b8; font-size:18px}
+.m-top{font-family:var(--display); font-size:48px; color:var(--gold); line-height:1.05; margin-bottom:10px}
+.m-card h3{margin:0 0 8px; font-size:25px; font-weight:700; line-height:1.25}
+.m-card p{margin:0; color:var(--muted); font-size:19px; line-height:1.58; font-weight:400}
 .bm{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:30px; text-align:left}
-.bm h3{font-family:"Playfair Display"; font-size:30px; margin:0 0 8px}
+.bm h3{font-family:var(--display); font-size:30px; margin:0 0 8px; line-height:1.15}
 .bm .price{color:var(--gold); font-weight:700; font-size:22px; margin-bottom:12px}
-.bm p{color:#cbc7bc; font-size:19px; margin:0}
+.bm p{color:var(--muted); font-size:20px; margin:0; line-height:1.58; font-weight:400}
 .team{display:grid; grid-template-columns:120px 1fr; gap:36px; align-items:center; max-width:1100px}
-.avatar{width:120px; height:120px; border-radius:28px; background:linear-gradient(135deg, rgba(201,168,106,.25), rgba(201,168,106,.05)); border:1px solid var(--line); display:grid; place-items:center; font-family:"Playfair Display"; font-size:44px; color:var(--gold); font-weight:800}
-.team h3{font-family:"Playfair Display"; font-size:40px; margin:0 0 12px}
+.avatar{width:120px; height:120px; border-radius:28px; background:linear-gradient(135deg, rgba(201,168,106,.25), rgba(201,168,106,.05)); border:1px solid var(--line); display:grid; place-items:center; font-family:var(--display); font-size:44px; color:var(--gold); font-weight:800}
+.team h3{font-family:var(--display); font-size:40px; margin:0 0 12px; line-height:1.12}
 .ask-card{background:linear-gradient(180deg, rgba(201,168,106,.12), rgba(201,168,106,.04)); border:1px solid var(--line); border-radius:24px; padding:40px; max-width:1000px}
-.ask-top{font-family:"Playfair Display"; font-size:56px; color:var(--gold); margin-bottom:20px}
-.ask-card ul{margin:0 0 18px 20px; font-size:22px; line-height:1.7}
-.ask-card .note{color:var(--muted); font-size:17px}
+.ask-top{font-family:var(--display); font-size:56px; color:var(--gold); margin-bottom:20px; line-height:1.1}
+.ask-card ul{margin:0 0 18px 20px; font-size:23px; line-height:1.65; font-weight:400; color:var(--text)}
+.ask-card .note{color:var(--muted); font-size:17px; font-weight:400}
 .vision-center{display:grid; place-items:center; text-align:center; height:100%}
-.vision{font-family:"Playfair Display"; font-weight:800; font-size:84px; line-height:1.05; max-width:1100px; margin:0 auto}
-.cover-footer{position:absolute; bottom:80px; left:100px; right:100px; display:flex; justify-content:space-between; color:var(--muted-2); font-size:18px; letter-spacing:.02em}
+.vision{font-family:var(--display); font-weight:800; font-size:84px; line-height:1.08; max-width:1100px; margin:0 auto}
+.cover-footer{position:absolute; bottom:80px; left:100px; right:100px; display:flex; justify-content:space-between; color:var(--muted-2); font-size:18px; letter-spacing:.02em; font-weight:400}
 .nav{position:absolute; bottom:80px; right:100px; display:flex; gap:12px; z-index:40}
 .nav button{width:48px; height:48px; border-radius:50%; border:1px solid var(--line); background:rgba(0,0,0,.3); color:#e8e6e1; cursor:pointer; backdrop-filter:blur(6px); transition:.2s; font-size:20px}
 .nav button:hover{border-color:var(--gold); color:var(--gold); transform:translateY(-1px)}
@@ -352,9 +360,9 @@ h2{
   .slide-counter{bottom:24px; left:0; right:0; text-align:center; font-size:13px}
   h1.wordmark{font-size:48px; margin-bottom:16px}
   h2{font-size:36px; margin-bottom:24px; line-height:1.12}
-  .subtitle{font-size:18px}
-  .lead{font-size:20px}
-  .body{font-size:18px}
+  .subtitle{font-size:18px; line-height:1.45}
+  .lead{font-size:21px; line-height:1.58}
+  .body{font-size:19px; line-height:1.65}
   .point{font-size:19px; padding-left:16px}
   .gold-bar{padding-left:16px; border-left-width:3px}
   .two-col,.three-cards,.grid-3,.product-grid,.traction{display:flex; flex-direction:column; gap:24px}

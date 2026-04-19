@@ -268,12 +268,48 @@ body{
 }
 .slide{
   position:absolute; inset:0;
-  padding:clamp(48px,6vw,88px) clamp(40px,7vw,112px);
+  /* Reserve space for bottom chrome: counter + nav (desktop) */
+  padding:clamp(48px,6vw,88px) clamp(40px,7vw,112px) clamp(100px,12vh,140px);
   display:flex; flex-direction:column; justify-content:center;
   background:none;
   opacity:0; transform:translateX(28px);
   transition:opacity .55s ease, transform .65s cubic-bezier(.2,.8,.2,1);
   pointer-events:none;
+}
+.slide--cover{
+  justify-content:flex-start;
+  padding-top:clamp(56px,8vh,100px);
+}
+.slide--cover .cover-main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:0;
+}
+.slide--cover .cover-bottom{
+  flex-shrink:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:end;
+  gap:16px 24px;
+  padding-right:72px; /* space for global nav buttons */
+  margin-top:auto;
+}
+.slide--cover .cover-footer{
+  position:static;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px 20px;
+  text-align:right;
+  margin:0;
+}
+.slide--cover .slide-counter{
+  position:static;
+  grid-column:1;
+  grid-row:1 / -1;
+  align-self:end;
 }
 .slide::before{
   content:"";
@@ -305,9 +341,14 @@ body{
   border-radius:999px;
 }
 .slide-counter{
-  position:absolute; bottom:clamp(40px,5vw,72px); left:clamp(40px,6vw,100px);
+  position:absolute; bottom:clamp(28px,4vh,56px); left:clamp(40px,6vw,100px);
   color:var(--muted-2); font-size:13px; letter-spacing:.14em;
   font-family:var(--sans); font-weight:500;
+  z-index:2;
+  max-width:min(240px,calc(100% - 200px)); /* keep clear of nav */
+}
+.slide--cover .slide-counter{
+  max-width:none;
 }
 h1.wordmark{
   font-family:var(--sans);
@@ -494,13 +535,13 @@ h2{
 .vision{font-family:var(--sans); font-weight:800; font-size:84px; line-height:1.08; max-width:1100px; margin:0 auto}
 .vision-lines .lead{font-size:clamp(1.35rem, 2.5vw + .75rem, 2.35rem); line-height:1.35; margin:18px 0}
 .cover-footer{
-  position:absolute; bottom:clamp(40px,5vw,72px); left:clamp(40px,6vw,100px); right:clamp(40px,6vw,100px);
+  position:absolute; bottom:clamp(28px,4vh,56px); left:clamp(40px,6vw,100px); right:clamp(120px,14vw,200px);
   display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   color:var(--muted-2); font-size:clamp(14px,1vw + 12px,17px); letter-spacing:.02em; font-weight:500;
   font-family:var(--sans);
 }
 .nav{
-  position:absolute; bottom:clamp(40px,5vw,72px); right:clamp(40px,6vw,100px);
+  position:absolute; bottom:clamp(24px,3.5vh,52px); right:clamp(40px,6vw,100px);
   display:flex; gap:10px; z-index:40;
 }
 .nav button{
@@ -567,6 +608,11 @@ h2{
   .ask-top{font-size:1.85rem}
   .ask-card ul{font-size:1rem; margin-left:16px}
   .vision{font-size:1.5rem}
+  .slide--cover .cover-bottom{
+    display:flex; flex-direction:column; align-items:stretch; gap:20px; padding-right:0;
+  }
+  .slide--cover .slide-counter{text-align:center; order:2}
+  .slide--cover .cover-footer{order:1; justify-content:center; text-align:center}
   .cover-footer{position:relative; bottom:auto; left:auto; right:auto; margin-top:48px; flex-direction:column; gap:6px; text-align:center; font-size:13px; justify-content:center}
   .metric .big{font-size:40px}
 }
@@ -577,18 +623,20 @@ h2{
   <div class="progress"><div class="bar"></div></div>
 
   <!-- SLIDE 1 COVER -->
-  <section class="slide is-active">
+  <section class="slide slide--cover is-active">
     <div class="logo"><img src="logo.webp" alt="MiningAlpha"></div>
     <div class="slide-num">COVER</div>
-    <div>
+    <div class="cover-main">
       <h1 class="wordmark">MiningAlpha</h1>
       <div class="subtitle">The pure play on the debasement + AI-infrastructure trade — priced at the junior miner.</div>
     </div>
-    <div class="cover-footer">
-      <span>miningalpha.ai</span>
-      <span>Harry Trippel · April 2026 · Zug, Switzerland</span>
+    <div class="cover-bottom">
+      <div class="slide-counter">01 / 13</div>
+      <div class="cover-footer">
+        <span>miningalpha.ai</span>
+        <span>Harry Trippel · April 2026 · Zug, Switzerland</span>
+      </div>
     </div>
-    <div class="slide-counter">01 / 13</div>
   </section>
 
   <!-- SLIDE 2 PROBLEM -->
@@ -792,7 +840,7 @@ h2{
     <div class="slide-counter">08 / 13</div>
   </section>
 
-  <!-- SLIDE 9 MONETIZATION (PHASE 1 EXAMPLES) -->
+  <!-- SLIDE 9 MONETIZATION -->
   <section class="slide">
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">08</div>

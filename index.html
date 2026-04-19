@@ -193,7 +193,7 @@
 <script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MiningAlpha — Pitch Deck v8</title>
+<title>MiningAlpha — Pitch Deck v10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -350,6 +350,13 @@ h2{
   box-shadow:var(--shadow-card);
 }
 .card--thesis{margin-bottom:28px; max-width:1100px; border-color:var(--line-gold)}
+.slide-panel{
+  background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.008));
+  border:1px solid var(--line); border-radius:var(--radius-md); padding:24px 26px; max-width:1100px;
+}
+.slide-panel--flush{margin-top:0}
+.traction-card .list{margin-top:8px}
+.traction-card .list li:last-child{border-bottom:0}
 .two-col{display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(40px,5vw,80px); align-items:start}
 .point{
   font-size:clamp(1.12rem, .85vw + .9rem, 1.5rem);
@@ -368,24 +375,25 @@ h2{
 .three-cards{grid-template-columns:repeat(3,1fr)}
 .grid-3{grid-template-columns:repeat(3,1fr)}
 .product-grid{grid-template-columns:1.1fr .9fr; align-items:center}
+/* Tailwind / narrative cards — same shell as slide 8 .m-card */
 .why-card{
-  background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-  border:1px solid var(--line); border-radius:var(--radius-md); padding:26px 28px;
-  transition:transform .2s ease, border-color .2s ease;
+  background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.008));
+  border:1px solid var(--line); border-radius:var(--radius-md); padding:24px 26px;
+  transition:border-color .2s ease;
 }
 .why-card:hover{border-color:var(--line-gold)}
 .why-card .n{
-  width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
-  background:linear-gradient(135deg, rgba(212,168,83,.2), rgba(212,168,83,.06));
-  color:var(--gold); font-weight:700; margin-bottom:14px;
-  border:1px solid var(--line-gold); font-size:14px; font-family:var(--sans);
+  font-family:var(--sans);
+  font-size:clamp(1.5rem, 1.5vw + .8rem, 2.25rem);
+  font-weight:800; line-height:1.1; color:var(--gold); margin:0 0 6px;
+  letter-spacing:-.02em;
 }
 .why-card h3{
-  font-family:var(--sans); font-size:clamp(1.2rem, .85vw + .95rem, 1.65rem);
-  margin:0 0 10px; font-weight:700; line-height:1.2; color:#faf8f3;
+  font-family:var(--sans); font-size:clamp(1.05rem, .45vw + .92rem, 1.35rem);
+  margin:0 0 10px; font-weight:700; line-height:1.28; color:#f2efe8;
 }
 .why-card p{
-  font-size:clamp(1.02rem, .5vw + .88rem, 1.22rem);
+  font-size:clamp(.98rem, .4vw + .85rem, 1.08rem);
   line-height:1.62; color:var(--body-secondary); margin:0; font-weight:400;
 }
 .pills{display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 28px}
@@ -419,7 +427,7 @@ h2{
 .layer{
   display:grid; grid-template-columns:minmax(100px,140px) 1fr; gap:24px; align-items:start;
   padding:24px 26px;
-  background:linear-gradient(120deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
+  background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.008));
   border:1px solid var(--line); border-radius:var(--radius-md);
 }
 .layer-n{
@@ -449,13 +457,18 @@ h2{
 .cust-metric span:last-child{color:var(--text); font-weight:600; text-align:right; max-width:58%}
 .cust-lede{margin:0 0 10px; color:var(--body-secondary); font-size:clamp(.92rem, .38vw + .84rem, 1.05rem); line-height:1.5}
 .cust-examples{color:var(--muted-2); font-size:clamp(.82rem, .3vw + .78rem, .95rem); line-height:1.45; margin:0}
+/* Monetization tiers — match slide 8 customer cards */
 .bm{
-  background:linear-gradient(165deg, rgba(255,255,255,.05), rgba(255,255,255,.012));
+  background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.008));
   border:1px solid var(--line); border-radius:var(--radius-md); padding:24px 26px; text-align:left;
 }
-.bm h3{font-family:var(--sans); font-size:clamp(1.15rem, .65vw + .95rem, 1.55rem); margin:0 0 6px; line-height:1.2; color:#faf8f3; font-weight:700}
-.bm .price{color:var(--gold); font-weight:600; font-size:clamp(1rem, .4vw + .9rem, 1.2rem); margin-bottom:10px; font-family:var(--sans); letter-spacing:.02em}
-.bm p{color:var(--body-secondary); font-size:clamp(.98rem, .42vw + .85rem, 1.1rem); margin:0; line-height:1.62; font-weight:400}
+.bm .m-top{font-size:clamp(1.35rem, 1.2vw + .75rem, 1.85rem); margin-bottom:4px}
+.bm h3{font-family:var(--sans); font-size:clamp(1.05rem, .45vw + .92rem, 1.35rem); margin:0 0 8px; line-height:1.25; color:#f2efe8; font-weight:700}
+.bm .price{
+  color:var(--gold); font-weight:600; font-size:clamp(.88rem, .35vw + .82rem, 1rem);
+  margin:0 0 12px; font-family:var(--sans); letter-spacing:.06em; text-transform:uppercase;
+}
+.bm p{color:var(--body-secondary); font-size:clamp(.98rem, .4vw + .85rem, 1.08rem); margin:0; line-height:1.62; font-weight:400}
 .team{display:grid; grid-template-columns:120px 1fr; gap:32px; align-items:center; max-width:1100px}
 .avatar{
   width:116px; height:116px; border-radius:22px;
@@ -537,6 +550,7 @@ h2{
   .card--thesis{margin-bottom:20px}
   .cust-metric{flex-direction:column; align-items:flex-start; gap:2px}
   .cust-metric span:last-child{text-align:left; max-width:100%}
+  .why-card .n{font-size:1.75rem}
   .why-card h3{font-size:1.35rem}
   .why-card p,.layer p,.bm p{font-size:.95rem}
   .card{padding:20px; border-radius:18px}
@@ -582,9 +596,11 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">01</div>
     <h2>The core data in a multi-trillion-dollar asset class is locked up.</h2>
+    <div class="subtitle" style="margin-bottom:24px">Public filings exist — but not in a form markets can use.</div>
     <div class="two-col">
-      <div>
-        <div class="point gold-bar"><strong>Supply data exists.</strong> Every resource estimate — grade, tonnage, capex, opex — is published.</div>
+      <div class="slide-panel slide-panel--flush">
+        <div class="eyebrow">THE GAP</div>
+        <div class="point gold-bar" style="margin-top:8px"><strong>Supply data exists.</strong> Every resource estimate — grade, tonnage, capex, opex — is published.</div>
         <div class="point gold-bar"><strong>But it’s trapped in PDFs.</strong> 500-page NI 43-101 and JORC reports written for geologists, not investors.</div>
         <div class="point gold-bar"><strong>The market trades blind.</strong> Retail guesses on headlines. Institutions pay for access.</div>
       </div>
@@ -604,23 +620,24 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">02</div>
     <h2>Tailwinds &amp; narrative</h2>
+    <div class="subtitle" style="margin-bottom:20px">Macro forces → where capital looks next</div>
     <div class="card card--thesis">
       <div class="eyebrow">THE THESIS</div>
       <p class="body" style="margin:0">Debasement and AI infrastructure both rewrite demand for critical metals and gold. That capital and attention ultimately show up in <strong class="gold">junior miners</strong> — the levered end of the chain. MiningAlpha is a pure play on building the data and AI layer in that value chain, early.</p>
     </div>
     <div class="three-cards">
       <div class="why-card">
-        <div class="n">1</div>
+        <div class="n">01</div>
         <h3>Currency debasement</h3>
         <p>Gold above $4,000 for the first time. JP Morgan sees $6,300 by end-2026, Goldman $5,400. Central banks are buying record tonnage as fiat credibility erodes.</p>
       </div>
       <div class="why-card">
-        <div class="n">2</div>
+        <div class="n">02</div>
         <h3>De-globalization</h3>
         <p>EU is stockpiling critical minerals. US admits domestic supply meets only 50% of 2035 demand. China export controls have fragmented rare earth and copper chains.</p>
       </div>
       <div class="why-card">
-        <div class="n">3</div>
+        <div class="n">03</div>
         <h3>AI industrialization</h3>
         <p>IEA: critical minerals demand surged in 2024. Copper faces 304kt deficit in 2025, only 70% of 2035 demand met. US relies on 100% foreign imports for key AI minerals.</p>
       </div>
@@ -633,7 +650,7 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">03</div>
     <h2>The evolution</h2>
-    <div class="subtitle" style="margin-bottom:28px">One spine — how the company compounds</div>
+    <div class="subtitle" style="margin-bottom:28px">One spine — how the company compounds · Data → Decision → Capital</div>
     <div style="max-width:1100px; display:grid; gap:22px">
       <div class="layer" style="margin:0">
         <div class="layer-n">LAYER 1</div>
@@ -648,7 +665,10 @@ h2{
         <div><h3 style="margin-bottom:6px">Capital</h3><p>Programmable streaming and royalty rails once the data layer is trusted. <strong class="gold">Phase 3 — later.</strong></p></div>
       </div>
     </div>
-    <p class="body" style="margin-top:28px; max-width:900px; color:var(--muted)">Everything below is Phase 1 proof: product, traction, buyers — so the roadmap reads as sequence, not hopscotch.</p>
+    <div class="slide-panel" style="margin-top:24px; max-width:900px">
+      <div class="eyebrow">READING ORDER</div>
+      <p class="body" style="margin:8px 0 0; color:var(--body-secondary)">Everything below is Phase 1 proof: product, traction, buyers — so the roadmap reads as sequence, not hopscotch.</p>
+    </div>
     <div class="slide-counter">04 / 13</div>
   </section>
 
@@ -657,10 +677,12 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">04</div>
     <h2>Mining data in 2026 is where on-chain data was in 2019.</h2>
-    <div class="analogy">
-      <p class="lead gold-bar">Before Dune Analytics, on-chain data was technically public but practically unusable — raw logs scattered across nodes, accessible only to engineers.</p>
+    <div class="subtitle" style="margin-bottom:20px">The Dune pattern — public raw data → queryable layer → ecosystem</div>
+    <div class="analogy slide-panel">
+      <div class="eyebrow">PARALLEL</div>
+      <p class="lead gold-bar" style="margin-top:8px">Before Dune Analytics, on-chain data was technically public but practically unusable — raw logs scattered across nodes, accessible only to engineers.</p>
       <p class="lead">Dune turned it into SQL tables. Suddenly anyone could query wallets, flows, and protocols in seconds. Dashboards, funds, and bots were built on top.</p>
-      <p class="lead"><strong class="gold">We’re doing the same for mining.</strong> MiningAlpha transforms NI 43-101 and JORC filings into structured, machine-queryable supply data — the base layer for the entire industry.</p>
+      <p class="lead" style="margin-bottom:0"><strong class="gold">We’re doing the same for mining.</strong> MiningAlpha transforms NI 43-101 and JORC filings into structured, machine-queryable supply data — the base layer for the entire industry.</p>
     </div>
     <div class="slide-counter">05 / 13</div>
   </section>
@@ -671,14 +693,16 @@ h2{
     <div class="slide-num">05</div>
     <h2>Phase 1 — we price every ounce in the ground</h2>
     <div class="subtitle" style="margin-bottom:24px">Data layer: PDFs → machine-queryable supply</div>
-    <div>
-      <p class="lead">Six specialist agents turn 500-page NI 43-101 and JORC filings into structured, backtestable data — then benchmark every asset against realized M&amp;A comps.</p>
-      <div style="margin-top:32px; display:grid; gap:18px; max-width:1100px">
-        <div class="point gold-bar"><strong>Market value:</strong> EV per ounce/pound in situ, cross-validated against observed M&amp;A transactions</div>
-        <div class="point gold-bar"><strong>Property data:</strong> jurisdiction, permits, NI 43-101/JORC status</div>
-        <div class="point gold-bar"><strong>Supply &amp; production:</strong> grade, tonnage, recovery, capex, opex</div>
-        <div class="point gold-bar"><strong>M&amp;A signals:</strong> comparable transactions, earn-ins, optionality</div>
-        <div class="point gold-bar"><strong>Capital flow:</strong> insider buying, placements, volume anomalies</div>
+    <div class="slide-panel slide-panel--flush">
+      <div class="eyebrow">PIPELINE</div>
+      <p class="lead" style="margin:8px 0 20px">Six specialist agents turn 500-page NI 43-101 and JORC filings into structured, backtestable data — then benchmark every asset against realized M&amp;A comps.</p>
+      <div class="eyebrow" style="margin-bottom:10px">WHAT WE EXTRACT</div>
+      <div style="display:grid; gap:14px">
+        <div class="point gold-bar" style="margin:0"><strong>Market value:</strong> EV per ounce/pound in situ, cross-validated against observed M&amp;A transactions</div>
+        <div class="point gold-bar" style="margin:0"><strong>Property data:</strong> jurisdiction, permits, NI 43-101/JORC status</div>
+        <div class="point gold-bar" style="margin:0"><strong>Supply &amp; production:</strong> grade, tonnage, recovery, capex, opex</div>
+        <div class="point gold-bar" style="margin:0"><strong>M&amp;A signals:</strong> comparable transactions, earn-ins, optionality</div>
+        <div class="point gold-bar" style="margin:0"><strong>Capital flow:</strong> insider buying, placements, volume anomalies</div>
       </div>
     </div>
     <div class="slide-counter">06 / 13</div>
@@ -690,8 +714,9 @@ h2{
     <div class="slide-num">06</div>
     <div class="traction">
       <div class="big-number">1,200+</div>
-      <div>
-        <h2 style="margin-bottom:20px">Infrastructure in production</h2>
+      <div class="traction-card slide-panel">
+        <div class="eyebrow">PROOF</div>
+        <h2 style="margin-bottom:16px; font-size:clamp(1.5rem, 2vw + 1rem, 2.35rem)">Infrastructure in production</h2>
         <ul class="list">
           <li><strong>1,200+ filings parsed</strong> — NI 43-101 and JORC, full pipeline: ingestion → extraction → scoring</li>
           <li><strong>500k+ structured data points</strong> — machine-queryable, backtestable against M&amp;A comps</li>
@@ -775,24 +800,28 @@ h2{
     <div class="subtitle" style="margin-bottom:24px">Not the full vision — the MVP and early levers; many more paths as the data layer compounds.</div>
     <div class="three-cards">
       <div class="bm">
-        <h3>Platform · Free</h3>
+        <div class="m-top">Free</div>
+        <h3>Platform</h3>
         <div class="price">Top of funnel</div>
         <p>Screener, scores, coverage browse. No AI, no agent, no export.</p>
       </div>
       <div class="bm">
-        <h3>Pro · AI chat</h3>
-        <div class="price">Paid tier</div>
+        <div class="m-top">Pro</div>
+        <h3>AI chat</h3>
+        <div class="price">Paid</div>
         <p><strong class="gold">Talk to the data.</strong> Screen and compare on-platform. Alerts + full archive. Retail comp: ~$170/mo research newsletters.</p>
       </div>
       <div class="bm">
-        <h3>Agent · API + local</h3>
-        <div class="price">Paid tier</div>
+        <div class="m-top">Agent</div>
+        <h3>API + local</h3>
+        <div class="price">Paid</div>
         <p>API and optional local agent in your stack. Same intelligence off-platform for funds and power users.</p>
       </div>
     </div>
     <div class="three-cards" style="grid-template-columns:1fr; margin-top:24px">
       <div class="bm">
-        <h3>Enterprise · coverage &amp; SLA</h3>
+        <div class="m-top">Enterprise</div>
+        <h3>Coverage &amp; SLA</h3>
         <div class="price">Later phase</div>
         <p>Custom universe, compliance, white-label. Pods, streamers, mining funds.</p>
       </div>
@@ -808,6 +837,7 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">09</div>
     <h2>Roadmap — tied to the three layers</h2>
+    <div class="subtitle" style="margin-bottom:22px">Same spine as slide 4 — execution calendar</div>
     <div class="roadmap">
       <div class="layer">
         <div class="layer-n">PHASE 1 · DATA</div>
@@ -834,12 +864,14 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">10</div>
     <h2>Team</h2>
+    <div class="subtitle" style="margin-bottom:24px">Operator background matched to the product arc</div>
     <div class="team">
       <div class="avatar">HT</div>
-      <div>
-        <h3>Harry Trippel — Founder</h3>
+      <div class="slide-panel slide-panel--flush" style="max-width:none">
+        <div class="eyebrow">FOUNDER</div>
+        <h3 style="margin-top:4px">Harry Trippel — Founder</h3>
         <p class="lead" style="margin-bottom:18px">Crypto/DeFi infrastructure operator. Shipped production smart contracts managing <strong class="gold">$1B+ in TVL</strong> on leading <strong class="gold">EVM chains</strong>. Deep experience as a <strong class="gold">data analyst</strong> at scale (on-chain analytics and dashboards) — the same skill set applied here to mining disclosures.</p>
-        <p class="lead"><strong class="gold">Why crypto and junior miners fit:</strong> both are technically dense, volatile, and alpha-driven. Volatility is what trained crypto-native operators to move fast and seek edge — exactly the mindset this asset class rewards.</p>
+        <p class="lead" style="margin-bottom:0"><strong class="gold">Why crypto and junior miners fit:</strong> both are technically dense, volatile, and alpha-driven. Volatility is what trained crypto-native operators to move fast and seek edge — exactly the mindset this asset class rewards.</p>
       </div>
     </div>
     <div class="slide-counter">11 / 13</div>
@@ -864,8 +896,9 @@ h2{
     <div class="logo"><img src="logo.webp" alt=""></div>
     <div class="slide-num">12</div>
     <div class="vision-center">
-      <div class="vision-lines" style="text-align:left; max-width:1100px; margin:0 auto">
-        <p class="lead"><span class="gold">Data layer —</span> structured supply for every junior miner.</p>
+      <div class="vision-lines slide-panel" style="text-align:left; max-width:1100px; margin:0 auto">
+        <div class="eyebrow">VISION</div>
+        <p class="lead" style="margin-top:8px"><span class="gold">Data layer —</span> structured supply for every junior miner.</p>
         <p class="lead"><span class="gold">Decision layer —</span> where analysts, funds, and agents price assets.</p>
         <p class="lead"><span class="gold">Capital layer —</span> programmable streaming and royalty finance for global mining.</p>
       </div>
